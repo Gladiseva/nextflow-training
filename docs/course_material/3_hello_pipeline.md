@@ -18,7 +18,6 @@ Let's go to the directory then:
 
 ```bash
 cd /workspaces/nextflow-training/exercises/hello-pipeline
-code .
 ```
 
 The `hello-pipeline` example (under `exercises/hello-pipeline/`) is a small but realistic DSL2 workflow that illustrates:

@@ -18,7 +18,6 @@ Let's go to the directory first:
 
 ```bash
 cd /workspaces/nextflow-training/exercises/TaxoFlow
-code .
 ```
 
 ??? abstract "These are the files in the directory"
@@ -55,7 +54,7 @@ wget --no-check-certificate --no-proxy 'https://zenodo.org/api/records/17708950/
 tar -xvzf content
 rm -r content
 cd -
-mkdir -p data/genome && cd "$_"
+mkdir -p data/TAIR10 && cd "$_"
 wget --no-check-certificate --no-proxy 'https://genome-idx.s3.amazonaws.com/bt/TAIR10.zip'
 unzip TAIR10.zip
 rm -r TAIR10.zip
@@ -188,7 +187,7 @@ The TaxoFlow example is a small metagenomics workflow that:
         params {
             reads                                 = null
             outdir                                = "${projectDir}/results"
-            bowtie2_index                         = "${projectDir}/data/genome/TAIR10/TAIR10"
+            bowtie2_index                         = "${projectDir}/data/TAIR10"
             kraken2_db                            = "${projectDir}/data/krakendb"
             sheet_csv                             = null
             report                                = "${projectDir}/bin/report.Rmd"
@@ -201,6 +200,10 @@ The TaxoFlow example is a small metagenomics workflow that:
 
         // Enable using docker as the container engine to run the pipeline
         docker.enabled = true
+
+        // Make hard copies of the output files
+        workflow.output.mode = 'copy'
+        outputDir = params.outdir
     ```
 
 ## Conditional execution with `if` statements
@@ -302,7 +305,7 @@ This is a clean way to:
         params {
             reads                                 = null
             outdir                                = "${projectDir}/results"
-            bowtie2_index                         = "${projectDir}/data/genome/TAIR10/TAIR10"
+            bowtie2_index                         = "${projectDir}/data/TAIR10"
             kraken2_db                            = "${projectDir}/data/krakendb"
             sheet_csv                             = null
             report                                = "${projectDir}/bin/report.Rmd"

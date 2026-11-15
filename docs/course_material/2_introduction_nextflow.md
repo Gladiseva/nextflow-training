@@ -22,11 +22,10 @@ We will have a folder for each exercise to maintain the file structure neat and 
 Let's go then to the to first exercise:
 
 ```bash
-cd exercises/intro_nextflow
-code .
+cd exercises/intro-pipeline
 ```
 
-This folder is empty as in this exercise we will build everything from the ground up. For the following exercises, we will provide the materials and/or templates.
+The file `hello_world.nf` is empty as in this exercise we will build everything from the ground up. For the following exercises, we will provide the materials and/or templates.
 
 This exercise will bear no biological meaning, it is designed to explain the fundamentals of Nextflow.
 
@@ -43,7 +42,7 @@ Other directives will be explained throughout the course.
 
 **Exercise:** The following example shows the minimal syntax to implement a process. What do you think it does? Does it create a file? If so, how is it called?
 
-```groovy title="hellow_nextflow.nf" linenums="1"
+```groovy title="hello_world.nf" linenums="1"
 process hello_world {
     output:
         path 'hello.txt'
@@ -59,7 +58,7 @@ process hello_world {
 
 You also need a **workflow** block that invokes your processes—otherwise Nextflow will not run anything.
 
-```groovy title="hellow_nextflow.nf" linenums="1"
+```groovy title="hello_world.nf" linenums="1"
 workflow {
 
     main:
@@ -71,7 +70,7 @@ workflow {
 
 It is now time to execute your first workflow! Nextflow runs the workflow defined in the `workflow` block. By default, it executes all processes that are called from that block.
 
-**Exercise:** Create a `hello_world.nf` file with the `hello_world` process and the `workflow` block below. Then, execute the workflow with `nextflow run hello_world.nf`. Where can you locate the output file? Explore the directory.
+**Exercise:** Populate the `hello_world.nf` file with the `hello_world` process and the `workflow` block below. Then, execute on the terminal the workflow with the `nextflow run hello_world.nf` command. Where can you locate the output file? Explore the directory.
 
 ??? full-code "Full code file"
     ```groovy title="hello_world.nf" linenums="1"
@@ -147,7 +146,7 @@ It is now time to execute your first workflow! Nextflow runs the workflow define
 **Exercise:** Re-run the exact same command. What happens?
 
 ??? success "Answer"
-    Nextflow runs again, but it may **reuse cached results** from a previous run. If the process has already produced the same output (Nextflow hashes inputs to detect this), you might see a message indicating that the task was cached. To force a fresh run, you can use `nextflow run hello_nextflow.nf -resume` after a failure, or delete the `work/` directory to clear the cache.
+    Nextflow runs again, but it may **reuse cached results** from a previous run. If the process has already produced the same output (Nextflow hashes inputs to detect this), you might see a message indicating that the task was cached. To force a fresh run, you can use `nextflow run hello_world.nf -resume` after a failure, or delete the `work/` directory to clear the cache.
 
 ??? info "Nextflow execution and caching"
     By default, Nextflow:
@@ -161,7 +160,7 @@ It is now time to execute your first workflow! Nextflow runs the workflow define
 
 Another directive used by most processes is `input`. It declares the file(s) or data required by the process to create the output. In the following example, a process uses `hello.txt` as input and copies its content to `copied_file.txt`:
 
-```groovy title="hellow_nextflow.nf" linenums="1"
+```groovy title="hello_world.nf" linenums="1"
 process copy_file {
     input:
         path hello
@@ -190,7 +189,7 @@ The `input` and `output` directives, combined with **channels**, create links (d
 
 In Nextflow, data flows through **channels**. The output of one process is a channel; we pass it as input to the next process. The `workflow` block defines this flow:
 
-```groovy title="hellow_nextflow.nf" linenums="1"
+```groovy title="hello_world.nf" linenums="1"
 workflow {
 
     main:
@@ -208,13 +207,13 @@ workflow {
     * Output names match what the downstream process expects.
     * File paths in your `script` use the correct variable names (e.g. `${hello}`).
 
-**Exercise:** Add the `copy_file` process to your `hello_nextflow.nf`, and update the `workflow` block to call both processes. Run the workflow with `nextflow run hello_nextflow.nf`. What do you see?
+**Exercise:** Add the `copy_file` process to your `hello_world.nf`, and update the `workflow` block to call both processes. Run the workflow with `nextflow run hello_world.nf`. What do you see?
 
 ??? tip "Where are you going to store the output of `copy_file`?"
     Following what we did in the previous exercise, try to figure out where to store the output of this process.
 
 ??? full-code "This is the final script"
-    ```groovy title="hellow_nextflow.nf" linenums="1"
+    ```groovy title="hello_world.nf" linenums="1"
     #!/usr/bin/env nextflow
 
     /*

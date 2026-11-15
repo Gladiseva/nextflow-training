@@ -19,7 +19,6 @@ Let's go to the directory then:
 
 ```bash
 cd /workspaces/nextflow-training/exercises/rnaseq-pipeline
-code .
 ```
 
 ??? abstract "These are the files in the directory"
