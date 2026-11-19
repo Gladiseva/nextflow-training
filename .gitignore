@@ -1,3 +1,5 @@
 solutions/genomics-pipeline
 .nextflow.log*
 .nextflow
+exercises/genomics-pipeline/results
+exercises/genomics-pipeline/work
