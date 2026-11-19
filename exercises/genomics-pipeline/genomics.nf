@@ -1,21 +1,44 @@
 #!/usr/bin/env nextflow
 
-// Module INCLUDE statements
+include { SAMTOOLS_INDEX          } from './modules/samtools_index.nf'
+include { GATK_HAPLOTYPECALLER    } from './modules/gatk_haplotypecaller.nf'
 
 workflow {
 
     main:
-    // Create input channel from a CSV file listing input file paths
+    bam_chanel = channel.fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row -> file(row.reads_bam) }
 
-    // Load the file paths for the accessory files (reference and intervals)
+    ref_fasta = file(params.reference)
+    ref_index = file(params.reference_index)
+    ref_dict = file(params.reference_dict)
+    interval_list_bed = file(params.intervals)
 
-    // Create index file for input BAM file
+    SAMTOOLS_INDEX(bam_chanel)
 
+    GATK_HAPLOTYPECALLER(
+        SAMTOOLS_INDEX.out.indexed_bam,
+        ref_fasta,
+        ref_index,
+        ref_dict,
+        interval_list_bed
+    )
 
-    // Call variants from the indexed BAM file
-
+    publish:
+    indexed_bam = SAMTOOLS_INDEX.out.indexed_bam
+    vcf = GATK_HAPLOTYPECALLER.out.vcf
+    vcf_idx = GATK_HAPLOTYPECALLER.out.idx
 }
 
 output {
-
+    indexed_bam {
+        path 'bam'
+    }
+    vcf {
+        path 'vcf'
+    }
+    vcf_idx {
+        path 'vcf'
+    }
 }
